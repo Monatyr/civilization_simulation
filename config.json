@@ -1,0 +1,10 @@
+{
+  "display_height": 800,
+  "display_width": 800,
+  "starting_population": 10,
+  "population_max": 100,
+
+  "agent": {
+    "max_health": 100
+  }
+}
