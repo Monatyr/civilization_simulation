@@ -1,4 +1,5 @@
 import random
+import pygame
 
 from simulation_map.cell.cell import Cell
 from simulation_agent.civilization_type import CivilizationType
@@ -47,6 +48,33 @@ class SimulationMap():
     def __placeTerritories(self, teamRedPos :Vec2, teamBluePos :Vec2):
         self.getCell(teamRedPos).claimTerritoryOf(CivilizationType.RED)
         self.getCell(teamBluePos).claimTerritoryOf(CivilizationType.BLUE)
+
+    # ==============================================================
+
+    def render(self, surface):
+        for x in range(self.width):
+            for y in range(self.height):
+                cell = self.__cells[x][y]
+                resources_color = (255, 255, 0) # yellow
+                territory_color = None
+
+                if cell.resources > 0:
+                    pygame.draw.rect(surface, resources_color, (x*10, y*10, 10, 10))
+                
+                if cell.civilizationType == CivilizationType.RED:
+                    territory_color = (255, 0, 0) # red
+                elif cell.civilizationType == CivilizationType.BLUE:
+                    territory_color = (0, 0, 255) # blue
+
+                if territory_color is not None:
+                    pygame.draw.rect(surface, territory_color, (x*10+2, y*10+2, 6, 6))
+
+        # Draw grid
+        for x in range(self.width+1):
+            pygame.draw.line(surface, (128,128,128), (x*10, 0), (x*10, self.height*10))
+        
+        for y in range(self.height+1):
+            pygame.draw.line(surface, (128,128,128), (0, y*10), (self.width*10, y*10))
 
     # ==============================================================
     
