@@ -1,4 +1,5 @@
 import random
+import pygame
 from typing import List
 
 from simulation_agent.civilization_type import CivilizationType
@@ -62,6 +63,22 @@ class SimulationAgent():
 
         if self.regeneration > 0.1:
             self.regeneration = 0.1
+    
+    # RENDER
+
+    def render(self, surface, viewPos :Vec2):
+        pos = self.position * 10 + Vec2(4, 4) - viewPos
+        size = 6
+
+        if pos.x < 0 or pos.y < 0 or pos.x > surface.get_width() or pos.y > surface.get_height():
+            return
+        
+        pygame.draw.circle(
+            surface,
+            (50, 50, 250) if self.civilizationType == CivilizationType.BLUE else (250, 50, 50),
+            (int(pos.x), int(pos.y)),
+            size
+        )
 
     # ACTIONS
 

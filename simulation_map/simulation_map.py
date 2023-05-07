@@ -51,7 +51,7 @@ class SimulationMap():
 
     # ==============================================================
 
-    def render(self, surface):
+    def render(self, surface, viewPos :Vec2):
         for x in range(self.width):
             for y in range(self.height):
                 cell = self.__cells[x][y]
@@ -59,7 +59,8 @@ class SimulationMap():
                 territory_color = None
 
                 if cell.resources > 0:
-                    pygame.draw.rect(surface, resources_color, (x*10, y*10, 10, 10))
+                    pos = Vec2(x, y) * 10 - viewPos
+                    pygame.draw.rect(surface, resources_color, (pos.x, pos.y, 10, 10))
                 
                 if cell.civilizationType == CivilizationType.RED:
                     territory_color = (255, 0, 0) # red
@@ -67,14 +68,15 @@ class SimulationMap():
                     territory_color = (0, 0, 255) # blue
 
                 if territory_color is not None:
-                    pygame.draw.rect(surface, territory_color, (x*10+2, y*10+2, 6, 6))
+                    pos = Vec2(x, y) * 10 + Vec2(2, 2) - viewPos
+                    pygame.draw.rect(surface, territory_color, (pos.x, pos.y, 6, 6))
 
         # Draw grid
         for x in range(self.width+1):
-            pygame.draw.line(surface, (128,128,128), (x*10, 0), (x*10, self.height*10))
+            pygame.draw.line(surface, (128,128,128), (x * 10 - viewPos.x, 0), (x * 10 - viewPos.x, self.height*10))
         
         for y in range(self.height+1):
-            pygame.draw.line(surface, (128,128,128), (0, y*10), (self.width*10, y*10))
+            pygame.draw.line(surface, (128,128,128), (0, y * 10 - viewPos.y), (self.width*10, y * 10 - viewPos.y))
 
     # ==============================================================
     

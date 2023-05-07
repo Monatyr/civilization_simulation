@@ -12,6 +12,13 @@ class Engine():
 
         self.running = True
 
+        self.view_pos = Vec2(0, 0)
+        self.view_width = 20
+        self.view_height = 15
+        self.cell_size = 32
+        self.mouse_pos = Vec2(0, 0)
+        self.dragging = False
+
         self.prepare()
     
     def prepare(self):
@@ -24,22 +31,45 @@ class Engine():
     
     def run(self):
         while self.running:
+            self.handle_events()
             self.run_loop()
 
-
-    def run_loop(self):
+    def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
-        
+            
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.dragging = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    self.dragging = False
+            elif event.type == pygame.MOUSEMOTION:
+                if self.dragging:
+                    delta = Vec2(event.rel[0], event.rel[1])
+                    self.view_pos -= delta
+
+                    if self.view_pos.x < 0:
+                        self.view_pos.x = 0
+                    
+                    if self.view_pos.y < 0:
+                        self.view_pos.y = 0
+
+        self.mouse_pos = Vec2(*pygame.mouse.get_pos())
+    
+    def run_loop(self):
         # Clear the screen
         self.__screen.fill((255,255,255))
 
-        # Render the map
-        self.__map.render(self.__screen)
+        # Render
+        self.__map.render(self.__screen, self.view_pos)
+
+        for agent in self.__agents:
+            agent.render(self.__screen, self.view_pos)
 
         # Update the screen
         pygame.display.flip()
