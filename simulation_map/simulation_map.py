@@ -81,6 +81,9 @@ class SimulationMap():
     # ==============================================================
     
     def getCell(self, pos) -> Cell:
+        if pos.x < 0 or pos.y < 0 or pos.x >= self.width or pos.y >= self.height:
+            return None
+        
         return self.__cells[pos.x][pos.y]
 
     def territoryOf(self, civilizationType :CivilizationType):
@@ -97,9 +100,11 @@ class SimulationMap():
         ret = []
 
         for i in range(radius.x * 2 + 1):
-            ret[i] = []
+            ret += [[]]
 
             for j in range(radius.y * 2 + 1):
-                ret[i][j] = self.getCell(center - radius + Vec2(i, j))
+                ret[i] += [
+                    self.getCell(center - radius + Vec2(i, j))
+                ]
 
         return ret

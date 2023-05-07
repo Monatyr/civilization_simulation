@@ -6,6 +6,7 @@ from simulation_agent.civilization_type import CivilizationType
 from simulation_agent.actions.action import Action
 from simulation_agent.actions.help_action import HelpAction
 from simulation_agent.actions.run_action import RunAction
+from simulation_agent.actions.explore_action import ExploreAction
 from simulation_agent.actions.action_type import ActionType
 from utils.vec2 import Vec2
 
@@ -84,11 +85,19 @@ class SimulationAgent():
 
     def act(self):
         if self.currentAction == None:
-            self.currentAction = Action(
+            self.currentAction = self._instantiateActionFromType(
                 self._selectNewAction()
             )
         
         self._doAction()
+    
+    def _instantiateActionFromType(self, actionType):
+        if actionType == ActionType.HELP:
+            return HelpAction(self)
+        elif actionType == ActionType.RUN_AWAY:
+            return RunAction(self)
+        else:
+            return ExploreAction(self)
     
     def _selectNewAction(self):
         # check priority actions
@@ -115,4 +124,14 @@ class SimulationAgent():
     def move(self, moveVector):
         self.simulationMap.getCell(self.position).removeAgent(self)
         self.position += moveVector
-        self.simulationMap.getCell(self.position).addAgent(self)
+        newCell = self.simulationMap.getCell(self.position)
+
+        if newCell is not None:
+            # if move succedeed
+            # move agent into it
+            newCell.addAgent(self)
+        else:
+            # if not (eg. case: tried to move outside the map)
+            # move back
+            self.position -= moveVector
+            self.simulationMap.getCell(self.position).addAgent(self)

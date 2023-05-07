@@ -8,13 +8,17 @@ from simulation_map.cell.cell_utils import CellUtils
 
 class HelpAction (Action):
     def __getAgentsThatAreCallingHelp(self):
-        return CellUtils.map_cells(
+        ret = CellUtils.map_cells(
             self._map,
             lambda cell: list(filter(
-                lambda agent: agent.isCallingForHelp(),
+                lambda agent: agent.isCallingForHelp,
                 cell.getAgents()
             ))
         )
+
+        # flatten array
+        return [agent for dim_x in ret for dim_y in dim_x for agent in dim_y]
+    
     
     def areConditionsMet(self):
         agentsThatAreCallingHelp = self.__getAgentsThatAreCallingHelp()

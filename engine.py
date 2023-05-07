@@ -25,8 +25,12 @@ class Engine():
         self.__map = SimulationMap(100, 100, 10, Vec2(10, 10), Vec2(90, 90))
         
         self.__agents = []
-        self.__agents += [SimulationAgent(self.__map, CivilizationType.BLUE, Vec2(10, 10))]
-        self.__agents += [SimulationAgent(self.__map, CivilizationType.RED, Vec2(90, 90))]
+
+        for i in range(1000):
+            self.__agents += [SimulationAgent(self.__map, CivilizationType.BLUE, Vec2(10, 10))]
+        
+        for i in range(1000):
+            self.__agents += [SimulationAgent(self.__map, CivilizationType.RED, Vec2(90, 90))]
 
     
     def run(self):
@@ -65,11 +69,22 @@ class Engine():
         # Clear the screen
         self.__screen.fill((255,255,255))
 
+        # Update state
+        self.update()
+
         # Render
+        self.render()
+        
+
+        # Update the screen
+        pygame.display.flip()
+    
+    def update(self):
+        for agent in self.__agents:
+            agent.act()
+
+    def render(self):
         self.__map.render(self.__screen, self.view_pos)
 
         for agent in self.__agents:
             agent.render(self.__screen, self.view_pos)
-
-        # Update the screen
-        pygame.display.flip()
