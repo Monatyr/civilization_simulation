@@ -1,8 +1,7 @@
 from simulation_agent.actions.action_type import ActionType
-from simulation_agent.simulation_agent import SimulationAgent
 
 class Action:
-    def __init__(self, agent :SimulationAgent) -> None:
+    def __init__(self, agent :'SimulationAgent') -> None:
         self._agent = agent
         self._map = agent.getSeenSimulationMapArea()
         self.__finished = False

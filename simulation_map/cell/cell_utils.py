@@ -1,9 +1,8 @@
 from typing import List, Any, Callable
-from simulation_map.cell import Cell
 
 class CellUtils:
     @staticmethod
-    def map_cells(cells: List[List[Cell]], callback: Callable[[Cell], Any]) -> List[List[Any]]:
+    def map_cells(cells: List[List['Cell']], callback: Callable[['Cell'], Any]) -> List[List[Any]]:
         results = []
 
         for row in cells:
@@ -16,7 +15,7 @@ class CellUtils:
         return results
 
     @staticmethod
-    def reduce_cells(cells: List[List[Cell]], callback: Callable[[Any, Cell], Any], initial_value: Any) -> Any:
+    def reduce_cells(cells: List[List['Cell']], callback: Callable[[Any, 'Cell'], Any], initial_value: Any) -> Any:
         result = initial_value
 
         for row in cells:
@@ -26,7 +25,7 @@ class CellUtils:
         return result
 
     @staticmethod
-    def filter_cells(cells: List[List[Cell]], callback: Callable[[Cell], bool]) -> List[List[Cell]]:
+    def filter_cells(cells: List[List['Cell']], callback: Callable[['Cell'], bool]) -> List[List['Cell']]:
         results = []
 
         for row in cells:

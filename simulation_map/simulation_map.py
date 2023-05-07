@@ -1,6 +1,6 @@
 import random
 
-from simulation_map.cell import Cell
+from simulation_map.cell.cell import Cell
 from simulation_agent.civilization_type import CivilizationType
 from utils.vec2 import Vec2
 
@@ -14,15 +14,15 @@ class SimulationMap():
         teamBluePos :Vec2
     ):
         self.width = width
-        self.heiht = height
+        self.height = height
 
         self.__cells = []
 
         for x in range(self.width):
-            self.__cells[x] = []
+            self.__cells += [[]]
 
             for y in range(self.height):
-                self.__cells[x][y] = Cell()
+                self.__cells[x] += [Cell()]
         
         self.__placeResources(numberOfResourcesCells)
         self.__placeTerritories(teamRedPos, teamBluePos)

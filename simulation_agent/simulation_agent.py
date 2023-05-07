@@ -6,7 +6,6 @@ from simulation_agent.actions.action import Action
 from simulation_agent.actions.help_action import HelpAction
 from simulation_agent.actions.run_action import RunAction
 from simulation_agent.actions.action_type import ActionType
-from simulation_map.simulation_map import SimulationMap
 from utils.vec2 import Vec2
 
 class SimulationAgent():
@@ -16,7 +15,7 @@ class SimulationAgent():
 
     def __init__(
         self,
-        simulationMap: SimulationMap,
+        simulationMap: 'SimulationMap',
         civilizationType :CivilizationType,
         position :Vec2,
         health :int = 100,

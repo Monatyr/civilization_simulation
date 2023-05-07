@@ -1,10 +1,10 @@
 from simulation_agent.actions.action import Action
-from simulation_agent.simulation_agent import SimulationAgent
 from simulation_map.cell.cell_utils import CellUtils
 
 class RunAction (Action):
     def areConditionsMet(self):
-        if self._agent.health >= 0.1 * SimulationAgent.__max_health:
+        # TODO: this condition has changed - update it
+        if self._agent.health >= 0.1 * 100:
             return False
         
         agentsCell = self._agent.simulationMap.getCell(self._agent.position)
