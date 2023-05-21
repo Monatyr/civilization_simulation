@@ -4,11 +4,11 @@ from engine import Engine
 
 if __name__ == "__main__":
     pygame.init()
-    pygame.display.set_mode((400, 500))
+    screen = pygame.display.set_mode((600, 800))
     pygame.display.set_caption('Civilisation Evolution')
 
     with open('config.json') as file:
         config = json.load(file)
 
-    engine = Engine(config)
+    engine = Engine(config, screen)
     engine.run()
