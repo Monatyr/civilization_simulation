@@ -13,13 +13,13 @@ class ActionType (Enum):
     TRAIN = 6
 
 
-
     def getPriorityActions():
         return [
             ActionType.HELP,
             ActionType.RUN_AWAY,
             ActionType.FIGHT,
         ]
+
 
     def getStandardAcitons():
         return [

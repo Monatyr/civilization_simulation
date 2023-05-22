@@ -14,8 +14,10 @@ class Cell():
     def getResources(self):
         return self.resources
     
+
     def setResources(self, amount):
         self.resources = amount
+
 
     def mineResource(self):
         if self.resources > 0:
@@ -30,8 +32,10 @@ class Cell():
     def getAgents(self) -> List[SimulationAgent]:
         return list(self._agents.values())
 
+
     def addAgent(self, agent :SimulationAgent):
         self._agents[agent.id] = agent
+    
     
     def removeAgent(self, agentID :Union[int, SimulationAgent]) -> bool:
         if isinstance(agentID, SimulationAgent):

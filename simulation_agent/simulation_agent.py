@@ -91,6 +91,7 @@ class SimulationAgent():
         
         self._doAction()
     
+
     def _instantiateActionFromType(self, actionType):
         if actionType == ActionType.HELP:
             return HelpAction(self)
@@ -99,6 +100,7 @@ class SimulationAgent():
         else:
             return ExploreAction(self)
     
+
     def _selectNewAction(self):
         # check priority actions
 
@@ -112,14 +114,17 @@ class SimulationAgent():
             random.randrange(0, len(self.actionVector))
         ]
 
+
     def _doAction(self):
         action = self.currentAction
         action.perform()
     
     # --------------------------------------------
 
+
     def getSeenSimulationMapArea(self) -> List[List["Cell"]]:
         return self.simulationMap.getArea(self.position, Vec2(SimulationAgent.__sight, SimulationAgent.__sight))
+
 
     def move(self, moveVector):
         self.simulationMap.getCell(self.position).removeAgent(self)

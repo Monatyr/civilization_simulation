@@ -25,6 +25,7 @@ class RunAction (Action):
         
         return True
     
+    
     def perform(self):
         moveVector = Vec2(
             random.randint(-1, 1),

@@ -24,6 +24,7 @@ class HelpAction (Action):
         agentsThatAreCallingHelp = self.__getAgentsThatAreCallingHelp()
         return len(agentsThatAreCallingHelp) > 0
     
+    
     def perform(self):
         agentsThatAreCallingHelp = self.__getAgentsThatAreCallingHelp()
 
