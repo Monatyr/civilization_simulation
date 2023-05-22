@@ -12,7 +12,7 @@ class HelpAction (Action):
             self._map,
             lambda cell: list(filter(
                 lambda agent: agent.isCallingForHelp,
-                cell.getAgents()
+                cell.getAgents() if cell is not None else []
             ))
         )
 
