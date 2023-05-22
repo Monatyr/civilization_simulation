@@ -21,7 +21,7 @@ class ActionType (Enum):
         ]
 
 
-    def getStandardAcitons():
+    def getStandardActions():
         return [
             ActionType.GO_FIGHT,
             ActionType.CALL_HELP,

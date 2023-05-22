@@ -7,6 +7,7 @@ from simulation_agent.actions.action import Action
 from simulation_agent.actions.help_action import HelpAction
 from simulation_agent.actions.run_action import RunAction
 from simulation_agent.actions.explore_action import ExploreAction
+from simulation_agent.actions.train_action import TrainAction
 from simulation_agent.actions.action_type import ActionType
 from utils.vec2 import Vec2
 
@@ -40,13 +41,10 @@ class SimulationAgent():
         self.currentAction = None
         self.actionVector = []
 
-        for at in ActionType.getStandardAcitons():
-            self.actionVector += [at]
+        self.actionVector = ActionType.getStandardActions()
 
-        for i in range(32 - len(self.actionVector)):
-            self.actionVector += [
-                random.choice(ActionType.getStandardAcitons())
-            ]
+        for _ in range(32 - len(self.actionVector)):
+            self.actionVector.append(random.choice(ActionType.getStandardActions()))
 
         if self.regeneration is None:
             self.regeneration = random.uniform(0.05, 0.1)
@@ -92,15 +90,18 @@ class SimulationAgent():
         self._doAction()
     
 
+    #TODO: implement all actions
     def _instantiateActionFromType(self, actionType):
         if actionType == ActionType.HELP:
             return HelpAction(self)
         elif actionType == ActionType.RUN_AWAY:
             return RunAction(self)
+        elif actionType == ActionType.TRAIN:
+            return TrainAction(self)
         else:
             return ExploreAction(self)
+        
     
-
     def _selectNewAction(self):
         # check priority actions
 
