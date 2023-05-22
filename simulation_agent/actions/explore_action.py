@@ -8,6 +8,7 @@ class ExploreAction (Action):
     def areConditionsMet(self):
         return True
     
+    
     def perform(self):
         # TODO: make movement not random
         moveVector = Vec2(

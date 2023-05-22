@@ -2,6 +2,7 @@ import pygame
 import json
 from engine import Engine
 
+
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((600, 800))

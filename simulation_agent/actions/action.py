@@ -6,11 +6,14 @@ class Action:
         self._map = agent.getSeenSimulationMapArea()
         self.__finished = False
 
+
     def finishAction(self):
         self.__finished = True
 
+
     def areConditionsMet(self):
         return True
+
 
     def perform(self):
         pass

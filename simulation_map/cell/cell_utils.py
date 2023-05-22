@@ -14,6 +14,7 @@ class CellUtils:
 
         return results
 
+
     @staticmethod
     def reduce_cells(cells: List[List['Cell']], callback: Callable[[Any, 'Cell'], Any], initial_value: Any) -> Any:
         result = initial_value
@@ -23,6 +24,7 @@ class CellUtils:
                 result = callback(result, cell)
 
         return result
+
 
     @staticmethod
     def filter_cells(cells: List[List['Cell']], callback: Callable[['Cell'], bool]) -> List[List['Cell']]:

@@ -28,6 +28,7 @@ class SimulationMap():
         self.__placeResources(numberOfResourcesCells)
         self.__placeTerritories(teamRedPos, teamBluePos)
     
+
     def __placeResources(self, numberOfResourcesCells):
         cellsWithResources = []
 
@@ -45,6 +46,7 @@ class SimulationMap():
 
             self.__cells[x][y].setResources(random.randint(25, 100))
     
+
     def __placeTerritories(self, teamRedPos :Vec2, teamBluePos :Vec2):
         self.getCell(teamRedPos).claimTerritoryOf(CivilizationType.RED)
         self.getCell(teamBluePos).claimTerritoryOf(CivilizationType.BLUE)
@@ -86,6 +88,7 @@ class SimulationMap():
         
         return self.__cells[pos.x][pos.y]
 
+
     def territoryOf(self, civilizationType :CivilizationType):
         ret = 0
 
@@ -95,6 +98,7 @@ class SimulationMap():
                     ret += 1
         
         return ret
+
 
     def getArea(self, center :Vec2, radius :Vec2):
         ret = []
