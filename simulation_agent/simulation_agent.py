@@ -1,17 +1,19 @@
+from __future__ import annotations
 import random
 import pygame
 from typing import List
 
 from simulation_agent.civilization_type import CivilizationType
-from simulation_agent.actions.action import Action
 from simulation_agent.actions.help_action import HelpAction
 from simulation_agent.actions.run_action import RunAction
 from simulation_agent.actions.explore_action import ExploreAction
 from simulation_agent.actions.train_action import TrainAction
 from simulation_agent.actions.action_type import ActionType
+from simulation_agent.actions.reproduction_action import ReproductionAction
 from utils.vec2 import Vec2
 
-class SimulationAgent():
+
+class SimulationAgent:
     __id_counter = 0
     __sight = 5
     __max_health = 100
@@ -23,7 +25,8 @@ class SimulationAgent():
         position :Vec2,
         health :int = 100,
         attack :int = 0.0,
-        regeneration :float = None
+        regeneration :float = None,
+        actionVector: list[ActionType] = None
     ):
         self.id = SimulationAgent.__id_counter
         SimulationAgent.__id_counter += 1
@@ -39,12 +42,13 @@ class SimulationAgent():
         self.regeneration = regeneration
 
         self.currentAction = None
-        self.actionVector = []
+        self.actionVector = actionVector
 
-        self.actionVector = ActionType.getStandardActions()
+        if self.actionVector is None:
+            self.actionVector = ActionType.getStandardActions()
 
-        for _ in range(32 - len(self.actionVector)):
-            self.actionVector.append(random.choice(ActionType.getStandardActions()))
+            for _ in range(32 - len(self.actionVector)):
+                self.actionVector.append(random.choice(ActionType.getStandardActions()))
 
         if self.regeneration is None:
             self.regeneration = random.uniform(0.05, 0.1)
@@ -86,8 +90,10 @@ class SimulationAgent():
             self.currentAction = self._instantiateActionFromType(
                 self._selectNewAction()
             )
-        
-        self._doAction()
+
+        #TODO: what if conditions are not met? Keep trying to draw another function?
+        if self.currentAction.areConditionsMet():
+            self._doAction()
     
 
     #TODO: implement all actions
@@ -98,6 +104,8 @@ class SimulationAgent():
             return RunAction(self)
         elif actionType == ActionType.TRAIN:
             return TrainAction(self)
+        elif actionType == ActionType.BREED:
+            return ReproductionAction(self)
         else:
             return ExploreAction(self)
         
@@ -141,3 +149,57 @@ class SimulationAgent():
             # move back
             self.position -= moveVector
             self.simulationMap.getCell(self.position).addAgent(self)
+
+    
+    def reproduce(self, other: SimulationAgent):
+        v1, v2 = self.actionVector, other.actionVector
+        n = len(v1)
+        new_v = v1[:n//4] + v2[n//4: n//2] + v1[n//2: 3*(n//4)] + v2[n//4:]
+        new_v = random.shuffle(self.fillActionVector(new_v))
+        
+        a1, a2 = self.attack, other.attack
+        new_a = round((a1 + a2) / 2, 2)
+
+        #TOD: regeneration
+        new_agent = SimulationAgent(self.simulationMap, self.civilizationType,
+                                    self.position.getNewV(), self.__max_health//2, new_a, None, new_v)
+        
+        curr_cell = self.simulationMap.getCell(self.position)
+        curr_cell.addAgent(new_agent)
+
+        # lower the health of both parents
+        self.health = self.health//2
+        other.health = other.health//2
+
+
+    # might be unneccessary and slow down the performance
+    def fillActionVector(self, vector):
+        '''Ensure that action vector has at least one action of every type'''
+        actions = ActionType.getStandardActions()
+        actions_count = {}
+        res = []
+
+        for a in vector:
+            actions_count[a] = actions_count.get(a, 0) + 1
+
+        to_fill, to_draw_from = [], []
+        for a in actions:
+            if actions_count.get(a, 0) == 0:
+                to_fill.append(a)
+            elif actions_count.get(a) > 1:
+                to_draw_from.append(a)
+            
+        for a in to_fill:
+            res.append(a)
+            drawn_a = random.choice(to_draw_from)
+            actions_count[drawn_a] -= 1
+            if actions_count[drawn_a] < 2:
+                to_draw_from.remove(drawn_a)
+
+        for a in to_draw_from:
+            res.extend([a for _ in range(actions_count[a])])
+
+        return res
+
+
+        

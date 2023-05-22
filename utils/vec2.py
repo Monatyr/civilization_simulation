@@ -1,3 +1,4 @@
+from __future__ import annotations
 import math
 
 class Vec2:
@@ -37,3 +38,6 @@ class Vec2:
 
     def isZero(self):
         return self.x == 0 and self.y == 0
+    
+    def getNewV(self):
+        return Vec2(self.x, self.y)
