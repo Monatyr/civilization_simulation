@@ -24,7 +24,7 @@ class SimulationAgent:
         civilizationType :CivilizationType,
         position :Vec2,
         health :int = 100,
-        attack :int = 0.0,
+        attack :int = 0.1,
         regeneration :float = None,
         actionVector: list[ActionType] = None
     ):
@@ -66,6 +66,9 @@ class SimulationAgent:
 
         if self.regeneration > 0.1:
             self.regeneration = 0.1
+        
+        # add to cell
+        self.simulationMap.getCell(self.position).addAgent(self)
     
     # RENDER
 
@@ -163,9 +166,6 @@ class SimulationAgent:
         #TOD: regeneration
         new_agent = SimulationAgent(self.simulationMap, self.civilizationType,
                                     self.position.getNewV(), self.__max_health//2, new_a, None, new_v)
-        
-        curr_cell = self.simulationMap.getCell(self.position)
-        curr_cell.addAgent(new_agent)
 
         # lower the health of both parents
         self.health = self.health//2
