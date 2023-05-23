@@ -6,16 +6,15 @@ import random
 
 class RunAction (Action):
     def areConditionsMet(self):
-        # TODO: this condition has changed - update it
         if self._agent.health >= 0.1 * 100:
             return False
         
         agentsCell = self._agent.simulationMap.getCell(self._agent.position)
-        agentsOnCell = agentsCell.getAgents()
+        self.__agentsOnCell = agentsCell.getAgents()
 
         isEnemyOnCell = False
 
-        for agent in agentsOnCell:
+        for agent in self.__agentsOnCell:
             if agent.civilizationType != self._agent.civilizationType:
                 isEnemyOnCell = True
                 break
@@ -27,6 +26,31 @@ class RunAction (Action):
     
     
     def perform(self):
+        alliesStrength = 0
+        enemiesStrength = 0
+
+        for agent in self.__agentsOnCell:
+            if agent.civilizationType == self._agent.civilizationType:
+                alliesStrength += agent.attack
+            else:
+                enemiesStrength += agent.attack
+        
+        if alliesStrength != 0:
+            escapeProb = 1.5 - enemiesStrength / alliesStrength
+        else:
+            escapeProb = 0
+
+        if escapeProb < 0:
+            escapeProb = 0
+        elif escapeProb > 1:
+            escapeProb = 1
+        
+        if random.random() > escapeProb:
+            # Run action failed
+            self.finishAction()
+            return
+
+        # Run away
         moveVector = Vec2(
             random.randint(-1, 1),
             random.randint(-1, 1)
