@@ -14,6 +14,8 @@ class Scoreboard:
         redCount = 0
         blueCount = 0
 
+        # TODO: add method to map something like areAgentsPosChanged() and if not skip counting 
+
         allAgents = self.__map.getAllAgents()
         
         allCount += len(allAgents)
