@@ -6,6 +6,7 @@ from typing import List
 from simulation_agent.civilization_type import CivilizationType
 from simulation_agent.actions.help_action import HelpAction
 from simulation_agent.actions.run_action import RunAction
+from simulation_agent.actions.fight_action import FightAction
 from simulation_agent.actions.explore_action import ExploreAction
 from simulation_agent.actions.train_action import TrainAction
 from simulation_agent.actions.action_type import ActionType
@@ -58,8 +59,8 @@ class SimulationAgent:
         if self.health > SimulationAgent.__max_health:
             self.health = SimulationAgent.__max_health
         
-        if self.health < 0:
-            self.health = 0
+        if self.health <= 0:
+            self.health = 1
         
         if self.regeneration < 0.05:
             self.regeneration = 0.05
@@ -105,6 +106,8 @@ class SimulationAgent:
             return HelpAction(self)
         elif actionType == ActionType.RUN_AWAY:
             return RunAction(self)
+        elif actionType == ActionType.FIGHT:
+            return FightAction(self)
         elif actionType == ActionType.TRAIN:
             return TrainAction(self)
         elif actionType == ActionType.BREED:
@@ -116,11 +119,14 @@ class SimulationAgent:
     def _selectNewAction(self):
         # check priority actions
 
-        if HelpAction(self).areConditionsMet():
-            return ActionType.HELP
-
         if RunAction(self).areConditionsMet():
             return ActionType.RUN_AWAY
+        
+        if FightAction(self).areConditionsMet():
+            return ActionType.FIGHT
+        
+        if HelpAction(self).areConditionsMet():
+            return ActionType.HELP
 
         return self.actionVector[
             random.randrange(0, len(self.actionVector))
@@ -152,6 +158,15 @@ class SimulationAgent:
             # move back
             self.position -= moveVector
             self.simulationMap.getCell(self.position).addAgent(self)
+    
+    def die(self):
+        self.simulationMap.getCell(self.position).removeAgent(self)
+
+    def hurt(self, amount):
+        self.health -= amount
+
+        if self.health <= 0:
+            self.die()
 
     
     def reproduce(self, other: SimulationAgent):
