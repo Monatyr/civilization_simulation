@@ -4,6 +4,7 @@ from simulation_map.simulation_map import SimulationMap
 from utils.vec2 import Vec2
 from simulation_agent.simulation_agent import SimulationAgent
 from simulation_agent.civilization_type import CivilizationType
+from scoreboard import Scoreboard
 
 class Engine():
     def __init__(self, config, screen):
@@ -23,17 +24,28 @@ class Engine():
     
 
     def prepare(self):
-        self.__map = SimulationMap(100, 100, 10, Vec2(10, 10), Vec2(90, 90))
+        self.__map = SimulationMap(
+            self.config['map']['width'], self.config['map']['height'],
+            self.config['map']['numberOfResourcesCells'],
+            Vec2.fromList(self.config['map']['agents']['red']['start']),
+            Vec2.fromList(self.config['map']['agents']['blue']['start'])
+        )
+        self.__scoreboard = Scoreboard(self.__map)
         
-        self.__agents = []
-
-        for i in range(1000):
-            self.__agents += [SimulationAgent(self.__map, CivilizationType.BLUE, Vec2(10, 10))]
+        for i in range(self.config['map']['agents']['red']['population']):
+            SimulationAgent(
+                self.__map,
+                CivilizationType.RED,
+                Vec2.fromList(self.config['map']['agents']['red']['start'])
+            )
         
-        for i in range(1000):
-            self.__agents += [SimulationAgent(self.__map, CivilizationType.RED, Vec2(90, 90))]
+        for i in range(self.config['map']['agents']['blue']['population']):
+            SimulationAgent(
+                self.__map,
+                CivilizationType.BLUE,
+                Vec2.fromList(self.config['map']['agents']['blue']['start'])
+            )
 
-    
     def run(self):
         while self.running:
             self.handle_events()
@@ -84,12 +96,14 @@ class Engine():
     
 
     def update(self):
-        for agent in self.__agents:
+        for agent in self.__map.getAllAgents():
             agent.act()
 
 
     def render(self):
         self.__map.render(self.__screen, self.view_pos)
 
-        for agent in self.__agents:
+        for agent in self.__map.getAllAgents():
             agent.render(self.__screen, self.view_pos)
+        
+        self.__scoreboard.render()

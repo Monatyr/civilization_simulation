@@ -14,18 +14,15 @@ class Scoreboard:
         redCount = 0
         blueCount = 0
 
-        for w in range(self.__map.width):
-            for h in range(self.__map.height):
-                cell = self.__map.getCell(Vec2(w, h))
-                allCount += len(cell._agents)
+        allAgents = self.__map.getAllAgents()
+        
+        allCount += len(allAgents)
 
-                for i in cell._agents:
-                    agent = cell._agents[i]
-
-                    if agent.civilizationType == CivilizationType.RED:
-                        redCount += 1
-                    elif agent.civilizationType == CivilizationType.RED:
-                        blueCount += 1
+        for agent in allAgents:
+            if agent.civilizationType == CivilizationType.RED:
+                redCount += 1
+            elif agent.civilizationType == CivilizationType.BLUE:
+                blueCount += 1
         
         hasChanged = False
 

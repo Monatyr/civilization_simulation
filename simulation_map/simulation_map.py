@@ -1,5 +1,6 @@
 import random
 import pygame
+from typing import List
 
 from simulation_map.cell.cell import Cell
 from simulation_agent.civilization_type import CivilizationType
@@ -82,6 +83,17 @@ class SimulationMap():
 
     # ==============================================================
     
+    def getAllAgents(self) -> List['Agent']:
+        # TODO: optimize - add caching
+        agents = []
+
+        for w in range(self.width):
+            for h in range(self.height):
+                cell = self.getCell(Vec2(w, h))
+                agents += list(cell._agents.values())
+        
+        return agents
+
     def getCell(self, pos) -> Cell:
         if pos.x < 0 or pos.y < 0 or pos.x >= self.width or pos.y >= self.height:
             return None

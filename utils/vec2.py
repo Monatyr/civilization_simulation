@@ -6,6 +6,12 @@ class Vec2:
         self.x = x
         self.y = y
     
+    @staticmethod
+    def fromList(l):
+        if len(l) == 2:
+            return Vec2(l[0], l[1])
+        return Vec2(0, 0)
+    
     def __add__(self, other):
         return Vec2(self.x + other.x, self.y + other.y)
         
