@@ -90,35 +90,14 @@ class SimulationAgent:
     # ACTIONS
 
     def act(self):
-        # check priority actions
-        selectedPrimaryAction = self._selectPrimaryAction()
-
-        if selectedPrimaryAction is not None:
-            self.currentAction = self._instantiateActionFromType(
-                selectedPrimaryAction
-            )
-        
-        # do normal actions
-        if self.currentAction is None:
+        if self.currentAction == None:
             self.currentAction = self._instantiateActionFromType(
                 self._selectNewAction()
             )
 
-        # check conditions (if conditions for the action not met - choose a new one)
-        tries = 0
-        
-        while not self.currentAction.areConditionsMet():
-            self.currentAction = self._instantiateActionFromType(
-                self._selectNewAction()
-            )
-            
-            tries += 1
-            
-            if tries > 100:
-                break
-        
-        # perform action
-        self._doAction()
+        #TODO: what if conditions are not met? Keep trying to draw another function?
+        if self.currentAction.areConditionsMet():
+            self._doAction()
     
 
     #TODO: implement all actions
@@ -136,7 +115,10 @@ class SimulationAgent:
         else:
             return ExploreAction(self)
         
-    def _selectPrimaryAction(self):
+    
+    def _selectNewAction(self):
+        # check priority actions
+
         if RunAction(self).areConditionsMet():
             return ActionType.RUN_AWAY
         
@@ -146,9 +128,6 @@ class SimulationAgent:
         if HelpAction(self).areConditionsMet():
             return ActionType.HELP
 
-        return None
-
-    def _selectNewAction(self):
         return self.actionVector[
             random.randrange(0, len(self.actionVector))
         ]
@@ -156,10 +135,6 @@ class SimulationAgent:
 
     def _doAction(self):
         action = self.currentAction
-        
-        if action is None:
-            return
-        
         action.perform()
     
     # --------------------------------------------

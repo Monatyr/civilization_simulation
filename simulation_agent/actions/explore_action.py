@@ -15,7 +15,10 @@ class ExploreAction (Action):
             random.randint(-1, 1),
             random.randint(-1, 1)
         )
-                
+
+        if moveVector.x == 0 and moveVector.y == 0:
+            moveVector.y = 1
+        
         self._agent.move(moveVector)
 
         self.finishAction()
