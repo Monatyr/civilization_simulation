@@ -13,6 +13,7 @@
     "height": 100,
     "numberOfResourcesCells": 10,
     "agents": {
+      "maxAgentsOnCell": 10,
       "red": {
         "start": [10,10],
         "population": 1000

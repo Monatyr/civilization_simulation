@@ -69,7 +69,7 @@ class SimulationAgent:
             self.regeneration = 0.1
         
         # add to cell
-        self.simulationMap.getCell(self.position).addAgent(self)
+        self.simulationMap.getCell(self.position).addAgent(self, True)
     
     # RENDER
 
@@ -145,19 +145,24 @@ class SimulationAgent:
 
 
     def move(self, moveVector):
-        self.simulationMap.getCell(self.position).removeAgent(self)
+        oldPosition = self.position
+
         self.position += moveVector
         newCell = self.simulationMap.getCell(self.position)
+
+        moved = False
 
         if newCell is not None:
             # if move succedeed
             # move agent into it
-            newCell.addAgent(self)
+            moved = newCell.addAgent(self)
+        
+        if moved:
+            self.simulationMap.getCell(oldPosition).removeAgent(self)
         else:
-            # if not (eg. case: tried to move outside the map)
+            # if not (eg. case: tried to move outside the map or cell is crouded)
             # move back
-            self.position -= moveVector
-            self.simulationMap.getCell(self.position).addAgent(self)
+            self.position = oldPosition
     
     def die(self):
         self.simulationMap.getCell(self.position).removeAgent(self)

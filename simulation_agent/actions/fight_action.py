@@ -7,20 +7,7 @@ import random
 class FightAction (Action):
     def areConditionsMet(self):
         agentsCell = self._agent.simulationMap.getCell(self._agent.position)
-        self.__agentsOnCell = agentsCell.getAgents()
-
-        isEnemyOnCell = False
-
-        for agent in self.__agentsOnCell:
-            if agent.civilizationType != self._agent.civilizationType:
-                isEnemyOnCell = True
-                break
-        
-        if not isEnemyOnCell:
-            return False
-        
-        return True
-    
+        return agentsCell.isFight()
     
     def perform(self):
         alliesStrength = 0

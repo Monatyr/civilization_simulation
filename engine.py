@@ -28,7 +28,8 @@ class Engine():
             self.config['map']['width'], self.config['map']['height'],
             self.config['map']['numberOfResourcesCells'],
             Vec2.fromList(self.config['map']['agents']['red']['start']),
-            Vec2.fromList(self.config['map']['agents']['blue']['start'])
+            Vec2.fromList(self.config['map']['agents']['blue']['start']),
+            self.config['map']['agents']['maxAgentsOnCell'],
         )
         self.__scoreboard = Scoreboard(self.__map)
         
