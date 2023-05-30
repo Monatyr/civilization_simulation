@@ -13,7 +13,8 @@ class SimulationMap():
         height :int,
         numberOfResourcesCells :int,
         teamRedPos :Vec2,
-        teamBluePos :Vec2
+        teamBluePos :Vec2,
+        maxAgentsOnCell :int = 10,
     ):
         self.width = width
         self.height = height
@@ -24,7 +25,7 @@ class SimulationMap():
             self.__cells += [[]]
 
             for y in range(self.height):
-                self.__cells[x] += [Cell()]
+                self.__cells[x] += [Cell(maxAgentsOnCell)]
         
         self.__placeResources(numberOfResourcesCells)
         self.__placeTerritories(teamRedPos, teamBluePos)
