@@ -8,6 +8,9 @@ class Cell():
         self.civilizationType = CivilizationType.NONE
         self.resources = 0
         self._agents = {}
+
+        self._redAgentsAmount = 0
+        self._blueAgentsAmount = 0
     
     # RESOURCES
 
@@ -35,6 +38,11 @@ class Cell():
 
     def addAgent(self, agent :SimulationAgent):
         self._agents[agent.id] = agent
+
+        if agent.civilizationType == CivilizationType.RED:
+            self._redAgentsAmount += 1
+        else:
+            self._blueAgentsAmount += 1
     
     
     def removeAgent(self, agentID :Union[int, SimulationAgent]) -> bool:
@@ -42,6 +50,13 @@ class Cell():
             agentID = agentID.id
         
         if agentID in self._agents:
+            agent = self._agents[agentID]
+            
+            if agent.civilizationType == CivilizationType.RED:
+                self._redAgentsAmount -= 1
+            else:
+                self._blueAgentsAmount -= 1
+            
             del self._agents[agentID]
             return True
         else:
@@ -51,4 +66,9 @@ class Cell():
 
     def claimTerritoryOf(self, civilizationType :CivilizationType):
         self.civilizationType = civilizationType
+
+    # ------------------------------------
+
+    def isFight(self):
+        return self._redAgentsAmount > 0 and self._blueAgentsAmount > 0
     
