@@ -21,14 +21,14 @@ class SimulationAgent:
     __max_health = 100
 
     def __init__(
-        self,
-        simulationMap: 'SimulationMap',
-        civilizationType :CivilizationType,
-        position :Vec2,
-        health :int = 100,
-        attack :int = 0.1,
-        regeneration :float = None,
-        actionVector: list[ActionType] = None
+            self,
+            simulationMap: 'SimulationMap',
+            civilizationType: CivilizationType,
+            position: Vec2,
+            health: int = 100,
+            attack: int = 0.1,
+            regeneration: float = None,
+            actionVector: list[ActionType] = None
     ):
         self.id = SimulationAgent.__id_counter
         SimulationAgent.__id_counter += 1
@@ -54,33 +54,33 @@ class SimulationAgent:
 
         if self.regeneration is None:
             self.regeneration = random.uniform(0.05, 0.1)
-        
+
         # Ensure values are between correct ranges
-        
+
         if self.health > SimulationAgent.__max_health:
             self.health = SimulationAgent.__max_health
-        
+
         if self.health <= 0:
             self.health = 1
-        
+
         if self.regeneration < 0.05:
             self.regeneration = 0.05
 
         if self.regeneration > 0.1:
             self.regeneration = 0.1
-        
+
         # add to cell
         self.simulationMap.getCell(self.position).addAgent(self, True)
-    
+
     # RENDER
 
-    def render(self, surface, viewPos :Vec2):
+    def render(self, surface, viewPos: Vec2):
         pos = self.position * 10 + Vec2(4, 4) - viewPos
         size = 6
 
         if pos.x < 0 or pos.y < 0 or pos.x > surface.get_width() or pos.y > surface.get_height():
             return
-        
+
         pygame.draw.circle(
             surface,
             (50, 50, 250) if self.civilizationType == CivilizationType.BLUE else (250, 50, 50),
@@ -98,7 +98,7 @@ class SimulationAgent:
             self.currentAction = self._instantiateActionFromType(
                 selectedPrimaryAction
             )
-        
+
         # do normal actions
         if self.currentAction is None:
             self.currentAction = self._instantiateActionFromType(
@@ -107,22 +107,21 @@ class SimulationAgent:
 
         # check conditions (if conditions for the action not met - choose a new one)
         tries = 0
-        
+
         while not self.currentAction.areConditionsMet():
             self.currentAction = self._instantiateActionFromType(
                 self._selectNewAction()
             )
-            
+
             tries += 1
-            
+
             if tries > 100:
                 break
-        
+
         # perform action
         self._doAction()
-    
 
-    #TODO: implement all actions
+    # TODO: implement all actions
     def _instantiateActionFromType(self, actionType):
         if actionType == ActionType.HELP:
             return HelpAction(self)
@@ -138,14 +137,14 @@ class SimulationAgent:
             return MineAction(self)
         else:
             return ExploreAction(self)
-        
+
     def _selectPrimaryAction(self):
         if RunAction(self).areConditionsMet():
             return ActionType.RUN_AWAY
-        
+
         if FightAction(self).areConditionsMet():
             return ActionType.FIGHT
-        
+
         if HelpAction(self).areConditionsMet():
             return ActionType.HELP
 
@@ -156,21 +155,18 @@ class SimulationAgent:
             random.randrange(0, len(self.actionVector))
         ]
 
-
     def _doAction(self):
         action = self.currentAction
-        
+
         if action is None:
             return
-        
-        action.perform()
-    
-    # --------------------------------------------
 
+        action.perform()
+
+    # --------------------------------------------
 
     def getSeenSimulationMapArea(self) -> List[List["Cell"]]:
         return self.simulationMap.getArea(self.position, Vec2(SimulationAgent.__sight, SimulationAgent.__sight))
-
 
     def move(self, moveVector):
         oldPosition = self.position
@@ -184,14 +180,14 @@ class SimulationAgent:
             # if move succedeed
             # move agent into it
             moved = newCell.addAgent(self)
-        
+
         if moved:
             self.simulationMap.getCell(oldPosition).removeAgent(self)
         else:
             # if not (eg. case: tried to move outside the map or cell is crouded)
             # move back
             self.position = oldPosition
-    
+
     def die(self):
         self.simulationMap.getCell(self.position).removeAgent(self)
 
@@ -201,24 +197,25 @@ class SimulationAgent:
         if self.health <= 0:
             self.die()
 
-    
+    def heal(self, amount):
+        self.health = self.__max_health if self.health + amount > self.__max_health else self.health + amount
+
     def reproduce(self, other: SimulationAgent):
         v1, v2 = self.actionVector, other.actionVector
         n = len(v1)
-        new_v = v1[:n//4] + v2[n//4: n//2] + v1[n//2: 3*(n//4)] + v2[n//4:]
+        new_v = v1[:n // 4] + v2[n // 4: n // 2] + v1[n // 2: 3 * (n // 4)] + v2[n // 4:]
         new_v = random.shuffle(self.fillActionVector(new_v))
-        
+
         a1, a2 = self.attack, other.attack
         new_a = round((a1 + a2) / 2, 2)
 
-        #TOD: regeneration
+        # TOD: regeneration
         new_agent = SimulationAgent(self.simulationMap, self.civilizationType,
-                                    self.position.getNewV(), self.__max_health//2, new_a, None, new_v)
+                                    self.position.getNewV(), self.__max_health // 2, new_a, None, new_v)
 
         # lower the health of both parents
-        self.health = self.health//2
-        other.health = other.health//2
-
+        self.health = self.health // 2
+        other.health = other.health // 2
 
     # might be unneccessary and slow down the performance
     def fillActionVector(self, vector):
@@ -236,7 +233,7 @@ class SimulationAgent:
                 to_fill.append(a)
             elif actions_count.get(a) > 1:
                 to_draw_from.append(a)
-            
+
         for a in to_fill:
             res.append(a)
             drawn_a = random.choice(to_draw_from)
@@ -248,6 +245,3 @@ class SimulationAgent:
             res.extend([a for _ in range(actions_count[a])])
 
         return res
-
-
-        

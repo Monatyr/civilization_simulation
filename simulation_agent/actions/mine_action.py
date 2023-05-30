@@ -6,6 +6,8 @@ class MineAction(Action):
         return self._agent.simulationMap.getCell(self._agent.position).resources > 0
 
     def perform(self):
+        healthRestoredScale = 2.0
         agentCell = self._agent.simulationMap.getCell(self._agent.position)
-        agentCell.mineResource()
+        mined = agentCell.mineResource()
+        self._agent.heal(mined*healthRestoredScale)
         self.finishAction()
