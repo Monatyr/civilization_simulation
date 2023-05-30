@@ -11,6 +11,7 @@ from simulation_agent.actions.explore_action import ExploreAction
 from simulation_agent.actions.train_action import TrainAction
 from simulation_agent.actions.action_type import ActionType
 from simulation_agent.actions.reproduction_action import ReproductionAction
+from simulation_agent.actions.mine_action import MineAction
 from utils.vec2 import Vec2
 
 
@@ -133,6 +134,8 @@ class SimulationAgent:
             return TrainAction(self)
         elif actionType == ActionType.BREED:
             return ReproductionAction(self)
+        elif actionType == ActionType.MINE:
+            return MineAction(self)
         else:
             return ExploreAction(self)
         
