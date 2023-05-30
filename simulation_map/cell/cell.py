@@ -4,10 +4,11 @@ from simulation_agent.civilization_type import CivilizationType
 from simulation_agent.simulation_agent import SimulationAgent
 
 class Cell():
-    def __init__(self):
+    def __init__(self, maxAgentsOnCell = 10):
         self.civilizationType = CivilizationType.NONE
         self.resources = 0
         self._agents = {}
+        self.__maxAgentsOnCell = maxAgentsOnCell
 
         self._redAgentsAmount = 0
         self._blueAgentsAmount = 0
@@ -36,13 +37,18 @@ class Cell():
         return list(self._agents.values())
 
 
-    def addAgent(self, agent :SimulationAgent):
+    def addAgent(self, agent :SimulationAgent, force :bool = False):
+        if not force and len(self._agents) >= self.__maxAgentsOnCell:
+            return False
+        
         self._agents[agent.id] = agent
 
         if agent.civilizationType == CivilizationType.RED:
             self._redAgentsAmount += 1
         else:
             self._blueAgentsAmount += 1
+        
+        return True
     
     
     def removeAgent(self, agentID :Union[int, SimulationAgent]) -> bool:
