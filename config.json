@@ -9,8 +9,8 @@
   },
 
   "map": {
-    "width": 100,
-    "height": 100,
+    "width": 50,
+    "height": 50,
     "numberOfResourcesCells": 10,
     "agents": {
       "maxAgentsOnCell": 10,
@@ -19,7 +19,7 @@
         "population": 1000
       },
       "blue": {
-        "start": [90,90],
+        "start": [40,40],
         "population": 1000
       }
     }
