@@ -6,14 +6,15 @@ import random
 
 class FightAction (Action):
     def areConditionsMet(self):
-        agentsCell = self._agent.simulationMap.getCell(self._agent.position)
-        return agentsCell.isFight()
+        self.__agentsCell = self._agent.simulationMap.getCell(self._agent.position)
+        return self.__agentsCell.isFight()
     
     def perform(self):
         alliesStrength = 0
         enemiesStrength = 0
 
-        for agent in self.__agentsOnCell:
+        agentsOnCell = self.__agentsCell.getAgents()
+        for agent in agentsOnCell:
             if agent.civilizationType == self._agent.civilizationType:
                 alliesStrength += agent.attack
             else:
