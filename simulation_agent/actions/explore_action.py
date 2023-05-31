@@ -6,10 +6,36 @@ import random
 
 
 class ExploreAction(Action):
+    def __init__(self, agent: 'SimulationAgent') -> None:
+        super().__init__(agent)
+        self.__claimProgress = 5
+
     def areConditionsMet(self):
         return True
 
     def perform(self):
+        agentsCell = self._agent.simulationMap.getCell(self._agent.position)
+        
+        isActionFinished = False
+
+        if agentsCell.civilizationType != self._agent.civilizationType:
+            isActionFinished = self.claimCell(agentsCell)
+        else:
+            isActionFinished = self.moveToUnclaimedCell()
+        
+        if isActionFinished:
+            self.finishAction()
+    
+    def claimCell(self, cell):
+        self.__claimProgress -= 1
+
+        if self.__claimProgress <= 0:
+            cell.claimTerritoryOf(self._agent.civilizationType)
+            return True
+        
+        return False
+    
+    def moveToUnclaimedCell(self):
         # Get all cells around agent
         radius = Vec2(1, 1)
         allCells = self._agent.simulationMap.getArea(self._agent.position, radius)
@@ -35,8 +61,8 @@ class ExploreAction(Action):
         else:
             moveVector = self.__getQuarterVector(radius)
             self._agent.move(moveVector)
-
-        self.finishAction()
+        
+        return True
 
     def __getQuarterVector(self, radius: Vec2) -> Vec2:
         if self._agent.position.x > self._agent.simulationMap.width / 2:  # II,III Quarter
