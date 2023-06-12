@@ -12,6 +12,7 @@ class Engine():
         self.__screen = screen
 
         self.running = True
+        self.paused = False
 
         self.view_pos = Vec2(0, 0)
         self.view_width = 20
@@ -50,7 +51,8 @@ class Engine():
     def run(self):
         while self.running:
             self.handle_events()
-            self.run_loop()
+            if not self.paused:
+                self.run_loop()
 
 
     def handle_events(self):
@@ -60,10 +62,17 @@ class Engine():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
-            
+                if event.key == pygame.K_SPACE:
+                    self.paused = not self.paused
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.dragging = True
+                if event.button == 3:
+                    x, y = pygame.mouse.get_pos()
+                    pos = Vec2(x // 10, y // 10)
+                    agents = self.__map.getCell(pos).getAgents()
+                    for agent in agents:
+                        print(agent)
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     self.dragging = False

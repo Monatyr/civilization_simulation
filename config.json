@@ -15,12 +15,12 @@
     "agents": {
       "maxAgentsOnCell": 10,
       "red": {
-        "start": [10,10],
-        "population": 500
+        "start": [10, 10],
+        "population": 100
       },
       "blue": {
-        "start": [40,40],
-        "population": 500
+        "start": [40, 40],
+        "population": 100
       }
     }
   }
