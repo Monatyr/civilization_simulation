@@ -29,6 +29,9 @@ class Vec2:
         
     def __neg__(self):
         return Vec2(-self.x, -self.y)
+    
+    def __str__(self):
+        return f"({self.x}, {self.y})"
         
     def dot(self, other):
         return self.x * other.x + self.y * other.y

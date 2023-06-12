@@ -245,3 +245,6 @@ class SimulationAgent:
             res.extend([a for _ in range(actions_count[a])])
 
         return res
+    
+    def __str__(self):
+        return f"Pos: {self.position}, Civ: {self.civilizationType.name}, Health: {self.health}, Attack: {self.attack}, Action: {self.currentAction}, ID: {self.id}"
