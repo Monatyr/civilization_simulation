@@ -44,9 +44,17 @@ class Vec2:
         
     def normalized(self):
         return self / self.length()
+    
+    def to_unit(self):
+        new_x = int(self.x / abs(self.x) if self.x else 0)
+        new_y = int(self.y / abs(self.y) if self.y else 0)
+        return Vec2(new_x, new_y)
 
     def isZero(self):
         return self.x == 0 and self.y == 0
+    
+    def distance(self, other):
+        return math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
     
     def getNewV(self):
         return Vec2(self.x, self.y)

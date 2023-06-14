@@ -25,7 +25,7 @@ class SimulationMap():
             self.__cells += [[]]
 
             for y in range(self.height):
-                self.__cells[x] += [Cell(maxAgentsOnCell)]
+                self.__cells[x] += [Cell(Vec2(x, y), maxAgentsOnCell)]
         
         self.__placeResources(numberOfResourcesCells)
         self.__placeTerritories(teamRedPos, teamBluePos)

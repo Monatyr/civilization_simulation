@@ -2,9 +2,11 @@ from typing import List, Union
 
 from simulation_agent.civilization_type import CivilizationType
 from simulation_agent.simulation_agent import SimulationAgent
+from utils.vec2 import Vec2
 
 class Cell():
-    def __init__(self, maxAgentsOnCell = 10):
+    def __init__(self, pos: Vec2, maxAgentsOnCell = 10):
+        self.pos = pos
         self.civilizationType = CivilizationType.NONE
         self.resources = 0
         self._agents = {}
