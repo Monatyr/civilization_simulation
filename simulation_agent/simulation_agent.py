@@ -100,7 +100,7 @@ class SimulationAgent:
             )
 
         # do normal actions
-        if self.currentAction is None:
+        if self.currentAction is None or self.currentAction.is_finished():
             self.currentAction = self._instantiateActionFromType(
                 self._selectNewAction()
             )

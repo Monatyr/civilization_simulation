@@ -10,6 +10,10 @@ class Action:
     def finishAction(self):
         self.__finished = True
 
+    
+    def is_finished(self):
+        return self.__finished
+
 
     def areConditionsMet(self):
         return True
