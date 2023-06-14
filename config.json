@@ -11,16 +11,16 @@
   "map": {
     "width": 50,
     "height": 50,
-    "numberOfResourcesCells": 1000,
+    "numberOfResourcesCells": 100,
     "agents": {
       "maxAgentsOnCell": 10,
       "red": {
         "start": [10, 10],
-        "population": 100
+        "population": 30
       },
       "blue": {
         "start": [40, 40],
-        "population": 100
+        "population": 30
       }
     }
   }

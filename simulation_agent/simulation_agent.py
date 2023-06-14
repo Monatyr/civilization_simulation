@@ -121,7 +121,7 @@ class SimulationAgent:
         # perform action
         self._doAction()
 
-    # TODO: implement all actions
+    # TODO: maybe create action only once and repurpose it? Should help with optimization
     def _instantiateActionFromType(self, actionType):
         if actionType == ActionType.HELP:
             return HelpAction(self)
