@@ -29,7 +29,6 @@ class FightAction (Action):
         fightResult = alliesStrength - enemiesStrength + random.uniform(-3.0, 3.0)
 
         cell = self._agent.simulationMap.getCell(self._agent.position) 
-        print(self._agent.simulationMap.getCell(self._agent.position).isFight(), "FIGHT", self._agent.position, cell._redAgentsAmount, cell._blueAgentsAmount)
 
         if fightResult < 0:
             for ally in allies:
