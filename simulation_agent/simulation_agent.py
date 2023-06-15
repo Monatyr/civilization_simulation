@@ -133,15 +133,14 @@ class SimulationAgent:
             return RunAction(self)
         elif actionType == ActionType.FIGHT:
             return FightAction(self)
-        # elif actionType == ActionType.TRAIN:
-        # elif actionType == ActionType.BREED:
-        #     return ReproductionAction(self)
+        elif actionType == ActionType.BREED:
+            return ReproductionAction(self)
         elif actionType == ActionType.MINE:
             return MineAction(self)
-        # elif actionType == ActionType.EXPLORE:
-        #     return ExploreAction(self)
-        else:
+        elif actionType == ActionType.TRAIN:
             return TrainAction(self)
+        else:
+            return ExploreAction(self)
 
 
     def _selectPrimaryAction(self):

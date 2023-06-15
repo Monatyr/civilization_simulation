@@ -17,7 +17,7 @@ class MineAction(Action):
         
         self.is_on_resources = False
 
-        surroundings = self._agent.simulationMap.getArea(self._agent.position, Vec2(2, 2))
+        surroundings = self._agent.simulationMap.getArea(self._agent.position, Vec2(4, 4))
         surroundings = list(concatenate(surroundings).flat)
         surroundings = list(filter(lambda x: x is not None, surroundings))
         resources = list(filter(lambda x: x.resources > 0, surroundings))
