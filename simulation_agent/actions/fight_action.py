@@ -8,6 +8,7 @@ class FightAction (Action):
     def __init__(self, agent: "SimulationAgent"):
         super().__init__(agent)
         self._agent.alreadyFought = False
+        self._agent.isCallingForHelp = False
 
 
     def areConditionsMet(self):
@@ -26,7 +27,8 @@ class FightAction (Action):
 
         alliesStrength = sum(list(map(lambda x: x.attack, allies)))
         enemiesStrength = sum(list(map(lambda x: x.attack, enemies)))
-        fightResult = alliesStrength - enemiesStrength + random.uniform(-3.0, 3.0)
+        random_range = 3
+        fightResult = alliesStrength - enemiesStrength + random.uniform(-random_range, random_range)
 
         cell = self._agent.simulationMap.getCell(self._agent.position) 
 
@@ -34,9 +36,13 @@ class FightAction (Action):
             for ally in allies:
                 ally.hurt(1)
                 ally.alreadyFought = True
+                if fightResult < -random_range:
+                    ally.isCallingForHelp = True
         else:
             for enemy in enemies:
                 enemy.hurt(1)
                 enemy.alreadyFought = True
+                if fightResult > random_range:
+                    enemy.isCallingForHelp = True
 
         self.finishAction()
