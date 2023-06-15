@@ -10,8 +10,10 @@ class ExploreAction(Action):
         super().__init__(agent)
         self.__claimProgress = 5
 
+
     def areConditionsMet(self):
         return True
+
 
     def perform(self):
         agentsCell = self._agent.simulationMap.getCell(self._agent.position)
@@ -26,6 +28,7 @@ class ExploreAction(Action):
         if isActionFinished:
             self.finishAction()
     
+
     def claimCell(self, cell):
         self.__claimProgress -= 1
 
@@ -35,6 +38,7 @@ class ExploreAction(Action):
         
         return False
     
+
     def moveToUnclaimedCell(self):
         # Get all cells around agent
         radius = Vec2(1, 1)
@@ -64,6 +68,7 @@ class ExploreAction(Action):
         
         return True
 
+
     def __getQuarterVector(self, radius: Vec2) -> Vec2:
         if self._agent.position.x > self._agent.simulationMap.width / 2:  # II,III Quarter
             if self._agent.position.y > self._agent.simulationMap.height / 2:
@@ -89,6 +94,7 @@ class ExploreAction(Action):
                 )
         else:
             return self.__handleQuarterAxis(radius)
+
 
     def __handleQuarterAxis(self, radius: Vec2):
         if self._agent.position.x == self._agent.simulationMap.width / 2:  # Y axis split

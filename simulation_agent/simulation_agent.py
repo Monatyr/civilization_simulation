@@ -179,16 +179,18 @@ class SimulationAgent:
         self.position += moveVector
         newCell = self.simulationMap.getCell(self.position)
 
+        self.simulationMap.getCell(oldPosition).removeAgent(self)
+        moved = False
+
         if newCell is not None:
             # if move succedeed move agent into it
             moved = newCell.addAgent(self)
 
-        if moved:
-            self.simulationMap.getCell(oldPosition).removeAgent(self)
-            return True
-        # if not (eg. case: tried to move outside the map or cell is crowded) move back
-        self.position = oldPosition
-        return False
+        if not moved:
+            self.position = oldPosition
+            self.simulationMap.getCell(oldPosition).addAgent(self)
+            return False
+        return True
 
 
     def die(self):
