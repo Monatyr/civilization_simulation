@@ -35,7 +35,7 @@ class MineAction(Action):
             move_vector = (self.closest.pos - self._agent.position).to_unit()
             self._agent.move(move_vector)
         else:
-            healthRestoredScale = 0.2
+            healthRestoredScale = 1
             agentCell = self._agent.simulationMap.getCell(self._agent.position)
             agentCell.mineResource()
             self._agent.heal(healthRestoredScale)
