@@ -1,8 +1,8 @@
 from simulation_agent.actions.action import Action
 from simulation_map.cell.cell_utils import CellUtils
 from utils.vec2 import Vec2
-
 import random
+
 
 class RunAction (Action):
     def areConditionsMet(self):
@@ -11,19 +11,12 @@ class RunAction (Action):
         
         agentsCell = self._agent.simulationMap.getCell(self._agent.position)
         self.__agentsOnCell = agentsCell.getAgents()
-
-        isEnemyOnCell = False
-
-        for agent in self.__agentsOnCell:
-            if agent.civilizationType != self._agent.civilizationType:
-                isEnemyOnCell = True
-                break
+        enemies = list(filter(lambda x: x.civilizationType != self._agent.civilizationType, self.__agentsOnCell))
         
-        if not isEnemyOnCell:
-            return False
-        
-        return True
-    
+        if enemies:
+            return True
+        return False
+
     
     def perform(self):
         alliesStrength = 0

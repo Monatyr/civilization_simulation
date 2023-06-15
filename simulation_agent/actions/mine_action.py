@@ -15,7 +15,9 @@ class MineAction(Action):
             self.is_on_resources = True
             return True
         
-        surroundings = self._agent.simulationMap.getArea(self._agent.position, Vec2(5, 5))
+        self.is_on_resources = False
+
+        surroundings = self._agent.simulationMap.getArea(self._agent.position, Vec2(2, 2))
         surroundings = list(concatenate(surroundings).flat)
         surroundings = list(filter(lambda x: x is not None, surroundings))
         resources = list(filter(lambda x: x.resources > 0, surroundings))
@@ -33,10 +35,10 @@ class MineAction(Action):
             move_vector = (self.closest.pos - self._agent.position).to_unit()
             self._agent.move(move_vector)
         else:
-            healthRestoredScale = 2.0
+            healthRestoredScale = 0.2
             agentCell = self._agent.simulationMap.getCell(self._agent.position)
-            mined = agentCell.mineResource()
-            self._agent.heal(mined*healthRestoredScale)
+            agentCell.mineResource()
+            self._agent.heal(healthRestoredScale)
         
         self.counter += 1
         if self.counter == 5:

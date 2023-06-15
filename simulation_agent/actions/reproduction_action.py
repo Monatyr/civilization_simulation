@@ -25,7 +25,9 @@ class ReproductionAction(Action):
     
 
     def perform(self):
-        self._agent.reproduce(self.partner)
+        new_agent = self._agent.reproduce(self.partner)
+        n = len(self._map)
+        self._map[n//2][n//2].addAgent(new_agent)
         self.finishAction()
 
 
