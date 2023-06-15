@@ -42,20 +42,7 @@ class HelpAction (Action):
 
         moveVector = closestAgent.position - self._agent.position
         
-        moveVector.normalized()
-
-        if moveVector.x > 0.5:
-            moveVector.x = 1
-        
-        if moveVector.x < -0.5:
-            moveVector.x = -1
-
-        if moveVector.y > 0.5:
-            moveVector.y = 1
-        
-        if moveVector.y < -0.5:
-            moveVector.y = -1
-        
+        moveVector = moveVector.to_unit()
         self._agent.move(moveVector)
 
         if self._agent.position == closestAgent.position or moveVector.isZero():
