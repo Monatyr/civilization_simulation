@@ -35,18 +35,20 @@ class Engine():
         self.__scoreboard = Scoreboard(self.__map)
         
         for i in range(self.config['map']['agents']['red']['population']):
-            SimulationAgent(
+            new_agent = SimulationAgent(
                 self.__map,
                 CivilizationType.RED,
                 Vec2.fromList(self.config['map']['agents']['red']['start'])
             )
+            self.__map.getCell(new_agent.position).addAgent(new_agent, True)
         
         for i in range(self.config['map']['agents']['blue']['population']):
-            SimulationAgent(
+            new_agent = SimulationAgent(
                 self.__map,
                 CivilizationType.BLUE,
                 Vec2.fromList(self.config['map']['agents']['blue']['start'])
             )
+            self.__map.getCell(new_agent.position).addAgent(new_agent, True)
 
     def run(self):
         while self.running:

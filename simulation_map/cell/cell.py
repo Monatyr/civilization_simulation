@@ -39,7 +39,7 @@ class Cell():
         return list(self._agents.values())
 
 
-    def addAgent(self, agent :SimulationAgent, force :bool = False):
+    def addAgent(self, agent :SimulationAgent, force :bool = True):
         if not force and len(self._agents) >= self.__maxAgentsOnCell:
             return False
         
@@ -65,7 +65,7 @@ class Cell():
             else:
                 self._blueAgentsAmount -= 1
             
-            del self._agents[agentID]
+            self._agents.pop(agentID)
             return True
         else:
             return False

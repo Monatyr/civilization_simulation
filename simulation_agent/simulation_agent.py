@@ -38,6 +38,7 @@ class SimulationAgent:
         self.civilizationType = civilizationType
         self.position = position
         self.isCallingForHelp = False
+        self.alreadyFought = False
 
         self.health = health
         self.attack = attack
@@ -69,8 +70,9 @@ class SimulationAgent:
         if self.regeneration > 0.1:
             self.regeneration = 0.1
 
-        # add to cell
-        self.simulationMap.getCell(self.position).addAgent(self, True)
+        # # add to cell
+        # self.simulationMap.getCell(self.position).addAgent(self, True)
+
 
     # RENDER
 
@@ -87,6 +89,7 @@ class SimulationAgent:
             (int(pos.x), int(pos.y)),
             size
         )
+
 
     # ACTIONS
 
@@ -121,6 +124,7 @@ class SimulationAgent:
         # perform action
         self._doAction()
 
+
     # TODO: maybe create action only once and repurpose it? Should help with optimization
     def _instantiateActionFromType(self, actionType):
         if actionType == ActionType.HELP:
@@ -129,31 +133,32 @@ class SimulationAgent:
             return RunAction(self)
         elif actionType == ActionType.FIGHT:
             return FightAction(self)
-        elif actionType == ActionType.TRAIN:
-            return TrainAction(self)
-        elif actionType == ActionType.BREED:
-            return ReproductionAction(self)
+        # elif actionType == ActionType.TRAIN:
+        # elif actionType == ActionType.BREED:
+        #     return ReproductionAction(self)
         elif actionType == ActionType.MINE:
             return MineAction(self)
+        # elif actionType == ActionType.EXPLORE:
+        #     return ExploreAction(self)
         else:
-            return ExploreAction(self)
+            return TrainAction(self)
+
 
     def _selectPrimaryAction(self):
         if RunAction(self).areConditionsMet():
             return ActionType.RUN_AWAY
-
         if FightAction(self).areConditionsMet():
             return ActionType.FIGHT
-
         if HelpAction(self).areConditionsMet():
             return ActionType.HELP
-
         return None
+
 
     def _selectNewAction(self):
         return self.actionVector[
             random.randrange(0, len(self.actionVector))
         ]
+
 
     def _doAction(self):
         action = self.currentAction
@@ -168,28 +173,28 @@ class SimulationAgent:
     def getSeenSimulationMapArea(self) -> List[List["Cell"]]:
         return self.simulationMap.getArea(self.position, Vec2(SimulationAgent.__sight, SimulationAgent.__sight))
 
-    def move(self, moveVector):
+
+    def move(self, moveVector) -> bool:
         oldPosition = self.position
 
         self.position += moveVector
         newCell = self.simulationMap.getCell(self.position)
 
-        moved = False
-
         if newCell is not None:
-            # if move succedeed
-            # move agent into it
+            # if move succedeed move agent into it
             moved = newCell.addAgent(self)
 
         if moved:
             self.simulationMap.getCell(oldPosition).removeAgent(self)
-        else:
-            # if not (eg. case: tried to move outside the map or cell is crouded)
-            # move back
-            self.position = oldPosition
+            return True
+        # if not (eg. case: tried to move outside the map or cell is crowded) move back
+        self.position = oldPosition
+        return False
+
 
     def die(self):
         self.simulationMap.getCell(self.position).removeAgent(self)
+
 
     def hurt(self, amount):
         self.health -= amount
@@ -197,8 +202,10 @@ class SimulationAgent:
         if self.health <= 0:
             self.die()
 
+
     def heal(self, amount):
         self.health = self.__max_health if self.health + amount > self.__max_health else self.health + amount
+
 
     def reproduce(self, other: SimulationAgent):
         v1, v2 = self.actionVector, other.actionVector
@@ -216,6 +223,8 @@ class SimulationAgent:
         # lower the health of both parents
         self.health = self.health // 2
         other.health = other.health // 2
+        return new_agent
+
 
     # might be unneccessary and slow down the performance
     def fillActionVector(self, vector):
@@ -246,5 +255,6 @@ class SimulationAgent:
 
         return res
     
+
     def __str__(self):
         return f"Pos: {self.position}, Civ: {self.civilizationType.name}, Health: {self.health}, Attack: {self.attack}, Action: {self.currentAction}, ID: {self.id}"
