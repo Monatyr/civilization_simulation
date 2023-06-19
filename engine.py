@@ -2,6 +2,7 @@ import pygame
 
 from simulation_map.simulation_map import SimulationMap
 from utils.vec2 import Vec2
+from utils.genome import Genome
 from simulation_agent.simulation_agent import SimulationAgent
 from simulation_agent.civilization_type import CivilizationType
 from scoreboard import Scoreboard
@@ -31,22 +32,27 @@ class Engine():
             Vec2.fromList(self.config['map']['agents']['red']['start']),
             Vec2.fromList(self.config['map']['agents']['blue']['start']),
             self.config['map']['agents']['maxAgentsOnCell'],
+            self.config['genome']['mutation_prob']
         )
         self.__scoreboard = Scoreboard(self.__map)
         
         for i in range(self.config['map']['agents']['red']['population']):
+            preferences = self.config['genome']['preferences']['red'] if 'red' in self.config['genome']['preferences'] else {}
             new_agent = SimulationAgent(
                 self.__map,
                 CivilizationType.RED,
-                Vec2.fromList(self.config['map']['agents']['red']['start'])
+                Vec2.fromList(self.config['map']['agents']['red']['start']),
+                Genome(32).generate_vector(preferences)
             )
             self.__map.getCell(new_agent.position).addAgent(new_agent, True)
         
         for i in range(self.config['map']['agents']['blue']['population']):
+            preferences = self.config['genome']['preferences']['blue'] if 'blue' in self.config['genome']['preferences'] else {}
             new_agent = SimulationAgent(
                 self.__map,
                 CivilizationType.BLUE,
-                Vec2.fromList(self.config['map']['agents']['blue']['start'])
+                Vec2.fromList(self.config['map']['agents']['blue']['start']),
+                Genome(32).generate_vector(preferences)
             )
             self.__map.getCell(new_agent.position).addAgent(new_agent, True)
 
