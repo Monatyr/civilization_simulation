@@ -13,7 +13,7 @@ from simulation_agent.actions.action_type import ActionType
 from simulation_agent.actions.reproduction_action import ReproductionAction
 from simulation_agent.actions.mine_action import MineAction
 from utils.vec2 import Vec2
-
+from utils.genome import Genome
 
 class SimulationAgent:
     __id_counter = 0
@@ -25,10 +25,10 @@ class SimulationAgent:
             simulationMap: 'SimulationMap',
             civilizationType: CivilizationType,
             position: Vec2,
+            actionVector: list[ActionType],
             health: int = 100,
             attack: int = 0.1,
             regeneration: float = None,
-            actionVector: list[ActionType] = None
     ):
         self.id = SimulationAgent.__id_counter
         SimulationAgent.__id_counter += 1
@@ -46,12 +46,6 @@ class SimulationAgent:
 
         self.currentAction = None
         self.actionVector = actionVector
-
-        if self.actionVector is None:
-            self.actionVector = ActionType.getStandardActions()
-
-            for _ in range(32 - len(self.actionVector)):
-                self.actionVector.append(random.choice(ActionType.getStandardActions()))
 
         if self.regeneration is None:
             self.regeneration = random.uniform(0.05, 0.1)
@@ -219,7 +213,9 @@ class SimulationAgent:
 
         # TOD: regeneration
         new_agent = SimulationAgent(self.simulationMap, self.civilizationType,
-                                    self.position.getNewV(), self.__max_health // 2, new_a, None, new_v)
+                                    self.position.getNewV(),
+                                    Genome(32).create_crossbred_vector(self.actionVector,other.actionVector,self.simulationMap.mutation_prob),
+                                      self.__max_health // 2, new_a, None, new_v)
 
         # lower the health of both parents
         self.health = self.health // 2

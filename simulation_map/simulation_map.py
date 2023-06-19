@@ -14,11 +14,13 @@ class SimulationMap():
         numberOfResourcesCells :int,
         teamRedPos :Vec2,
         teamBluePos :Vec2,
+        mutation_prob: float,
         maxAgentsOnCell :int = 10,
     ):
         self.width = width
         self.height = height
-
+        self.mutation_prob = mutation_prob
+        
         self.__cells = []
 
         for x in range(self.width):

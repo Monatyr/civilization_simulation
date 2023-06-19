@@ -3,11 +3,30 @@
   "display_width": 800,
   "starting_population": 10,
   "population_max": 100,
-
   "agent": {
     "max_health": 100
   },
-
+  "genome":{
+    "mutation_prob": 0.1,
+    "preferences":{
+      "red": {
+        "go_fight": 0.1,
+        "call_help": 0.2,
+        "explore": 0.2,
+        "mine": 0.25,
+        "breed": 0.15,
+        "train": 0.1
+      },
+      "blue": {
+        "go_fight": 0.25,
+        "call_help": 0.25,
+        "explore": 0.20,
+        "mine": 0.5,
+        "breed": 0.1,
+        "train": 0.15
+      }
+    }
+  },
   "map": {
     "width": 50,
     "height": 50,

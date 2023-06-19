@@ -30,3 +30,6 @@ class ActionType (Enum):
             ActionType.BREED,
             ActionType.TRAIN,
         ]
+
+    def __lt__(self, other):
+        return self.value < other.value
