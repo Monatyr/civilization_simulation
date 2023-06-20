@@ -204,54 +204,19 @@ class SimulationAgent:
 
     def reproduce(self, other: SimulationAgent):
         v1, v2 = self.actionVector, other.actionVector
-        n = len(v1)
-        new_v = v1[:n // 4] + v2[n // 4: n // 2] + v1[n // 2: 3 * (n // 4)] + v2[n // 4:]
-        new_v = random.shuffle(self.fillActionVector(new_v))
-
         a1, a2 = self.attack, other.attack
         new_a = round((a1 + a2) / 2, 2)
 
         # TOD: regeneration
         new_agent = SimulationAgent(self.simulationMap, self.civilizationType,
                                     self.position.getNewV(),
-                                    Genome(32).create_crossbred_vector(self.actionVector,other.actionVector,self.simulationMap.mutation_prob),
-                                      self.__max_health // 2, new_a, None, new_v)
+                                    Genome(32).create_crossbred_vector(v1,v2,self.simulationMap.mutation_prob),
+                                      self.__max_health // 2, new_a, None)
 
         # lower the health of both parents
         self.health = self.health // 2
         other.health = other.health // 2
         return new_agent
-
-
-    # might be unneccessary and slow down the performance
-    def fillActionVector(self, vector):
-        '''Ensure that action vector has at least one action of every type'''
-        actions = ActionType.getStandardActions()
-        actions_count = {}
-        res = []
-
-        for a in vector:
-            actions_count[a] = actions_count.get(a, 0) + 1
-
-        to_fill, to_draw_from = [], []
-        for a in actions:
-            if actions_count.get(a, 0) == 0:
-                to_fill.append(a)
-            elif actions_count.get(a) > 1:
-                to_draw_from.append(a)
-
-        for a in to_fill:
-            res.append(a)
-            drawn_a = random.choice(to_draw_from)
-            actions_count[drawn_a] -= 1
-            if actions_count[drawn_a] < 2:
-                to_draw_from.remove(drawn_a)
-
-        for a in to_draw_from:
-            res.extend([a for _ in range(actions_count[a])])
-
-        return res
-    
 
     def __str__(self):
         return f"Pos: {self.position}, Civ: {self.civilizationType.name}, Health: {self.health}, Attack: {self.attack}, Action: {self.currentAction}, ID: {self.id}"
