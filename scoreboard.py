@@ -1,5 +1,7 @@
 from utils.vec2 import Vec2
 from simulation_agent.civilization_type import CivilizationType
+import utils.plots
+import utils.pickle
 
 class CivilizationScore:
     resourcesMined = {
@@ -43,6 +45,11 @@ class Scoreboard:
         self.__allCount = 0
         self.__redCount = 0
         self.__blueCount = 0
+
+        self.__pointsOverTime = {
+            CivilizationType.RED: [],
+            CivilizationType.BLUE: [],
+        }
     
     def __count(self):
         allCount = 0
@@ -92,8 +99,18 @@ class Scoreboard:
 
         return hasChanged
     
+    def __savePoints(self, pnts):
+        self.__pointsOverTime[CivilizationType.RED].append(pnts[CivilizationType.RED])
+        self.__pointsOverTime[CivilizationType.BLUE].append(pnts[CivilizationType.BLUE])
+    
+    def getPointsOverTime(self):
+        return self.__pointsOverTime
+
     def render(self):
         hasChanged = self.__count()
+        pnts = self.calculatePoints()
+
+        self.__savePoints(pnts)
 
         if hasChanged:
             print(
@@ -105,7 +122,6 @@ class Scoreboard:
                 '(', int(self.__blueStrength), '|', int(self.__blueHealth), ')'
             )
 
-            pnts = self.calculatePoints()
             print("SCORES:\tred:", pnts[CivilizationType.RED], "\tblue:", pnts[CivilizationType.BLUE])
     
     def renderEnd(self):
@@ -127,6 +143,10 @@ class Scoreboard:
             print("BLUE WON!")
         else:
             print("DRAW!")
+        
+        
+        utils.pickle.savePickle('points_over_time.pkl', self.__pointsOverTime)
+        utils.plots.renderPointsOverTime(self.__pointsOverTime)
     
 
     def getCounts(self):
