@@ -8,17 +8,16 @@ class Genome:
         self.actions: list[ActionType] = ActionType.getStandardActions()
     
     def generate_vector(self, preferences: dict[str,float]) -> list[ActionType]:
-        preferences_ints = list(map(lambda x: int(x * 1000), preferences.values()))
-        assert sum(preferences_ints) == 1000, "Sum of preferences not equal to 1"
+        assert sum(preferences.values()) == 32, "Sum of preferences not equal to 32"
         preferences = self.__validate_preferences(preferences)
 
         action_vector: list[ActionType] = []
         for action in self.actions:
-            vector_size = int(math.ceil(self.length * preferences[action.name.lower()]))
-            specialized_vector = [action]*vector_size
+            specialized_vector = [action for _ in range(preferences[action.name.lower()])]
             action_vector += specialized_vector
         
         return self.adjust_vector(action_vector)
+    
 
     def __validate_preferences(self, preferences: dict[str,float]) -> dict[str,float]:
         if len(preferences.keys()) != len(self.actions):
@@ -35,6 +34,7 @@ class Genome:
         
         return fresh_preferences
 
+
     def create_crossbred_vector(self, first_vector: list[ActionType], second_vector: list[ActionType], mutation_prob: float) -> list[ActionType]:
         first_quarter: int = self.length//4
         second_quarter: int = first_quarter*2
@@ -48,8 +48,8 @@ class Genome:
         if random.random() < mutation_prob:
             for _ in range(4):
                 new_vector[random.randint(0,31)] = random.choice(self.actions)
-        
         return sorted(new_vector)
+
 
     def adjust_vector(self, action_vector: list[ActionType]) -> list[ActionType]:
         random.shuffle(action_vector)

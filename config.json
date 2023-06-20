@@ -10,20 +10,20 @@
     "mutation_prob": 0.1,
     "preferences": {
       "red": {
-        "go_fight": 0.1,
-        "call_help": 0.2,
-        "explore": 0.2,
-        "mine": 0.25,
-        "breed": 0.15,
-        "train": 0.1
+        "go_fight": 8,
+        "call_help": 8,
+        "explore": 4,
+        "mine": 4,
+        "breed": 4,
+        "train": 4
       },
       "blue": {
-        "go_fight": 0.25,
-        "call_help": 0.25,
-        "explore": 0.2,
-        "mine": 0.1,
-        "breed": 0.1,
-        "train": 0.1
+        "go_fight": 8,
+        "call_help": 8,
+        "explore": 4,
+        "mine": 4,
+        "breed": 4,
+        "train": 4
       }
     }
   },
