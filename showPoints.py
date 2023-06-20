@@ -10,8 +10,9 @@ title = 'Points Over Time'
 
 if len(sys.argv) > 1:
     picklePath = sys.argv[1]
-    ylabel = 'Population'
-    title = 'Civilization population over time'
+    if 'civ' in picklePath:
+        ylabel = 'Population'
+        title = 'Civilization population over time'
 
 
 loaded_pointsOverTime = utils.pickle.loadPickle(picklePath)
