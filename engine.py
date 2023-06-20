@@ -61,6 +61,8 @@ class Engine():
             self.handle_events()
             if not self.paused:
                 self.run_loop()
+        
+        self.__scoreboard.renderEnd()
 
 
     def handle_events(self):
@@ -111,6 +113,10 @@ class Engine():
 
         # Update the screen
         pygame.display.flip()
+
+        # Sould end
+        if self.shouldEnd():
+            self.running = False
     
 
     def update(self):
@@ -125,3 +131,19 @@ class Engine():
             agent.render(self.__screen, self.view_pos)
         
         self.__scoreboard.render()
+    
+    def shouldEnd(self):
+        populationsCounts = self.__scoreboard.getCounts()
+
+        # end if one population is 0
+        if populationsCounts[CivilizationType.RED] == 0 or populationsCounts[CivilizationType.BLUE] == 0:
+            return True
+        
+        # end if none resources are found
+        for w in range(self.__map.width):
+            for h in range(self.__map.height):
+                cell = self.__map.getCell(Vec2(w, h))
+
+                if cell.resources > 0:
+                    return False
+        return True

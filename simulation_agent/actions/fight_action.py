@@ -1,5 +1,6 @@
 from simulation_agent.actions.action import Action
 from simulation_map.cell.cell_utils import CellUtils
+from scoreboard import CivilizationScore
 from utils.vec2 import Vec2
 import random
 
@@ -38,11 +39,17 @@ class FightAction (Action):
                 ally.alreadyFought = True
                 if fightResult < -random_range:
                     ally.isCallingForHelp = True
+            
+            if len(enemies) > 0:
+                CivilizationScore.addFightsWon(enemies[0].civilizationType)
         else:
             for enemy in enemies:
                 enemy.hurt(1)
                 enemy.alreadyFought = True
                 if fightResult > random_range:
                     enemy.isCallingForHelp = True
+            
+            if len(allies) > 0:
+                CivilizationScore.addFightsWon(allies[0].civilizationType)
 
         self.finishAction()
