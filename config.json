@@ -6,9 +6,9 @@
   "agent": {
     "max_health": 100
   },
-  "genome":{
+  "genome": {
     "mutation_prob": 0.1,
-    "preferences":{
+    "preferences": {
       "red": {
         "go_fight": 0.1,
         "call_help": 0.2,
@@ -20,10 +20,10 @@
       "blue": {
         "go_fight": 0.25,
         "call_help": 0.25,
-        "explore": 0.20,
-        "mine": 0.5,
+        "explore": 0.2,
+        "mine": 0.1,
         "breed": 0.1,
-        "train": 0.15
+        "train": 0.1
       }
     }
   },

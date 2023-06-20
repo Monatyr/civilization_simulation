@@ -8,6 +8,8 @@ class Genome:
         self.actions: list[ActionType] = ActionType.getStandardActions()
     
     def generate_vector(self, preferences: dict[str,float]) -> list[ActionType]:
+        preferences_ints = list(map(lambda x: int(x * 1000), preferences.values()))
+        assert sum(preferences_ints) == 1000, "Sum of preferences not equal to 1"
         preferences = self.__validate_preferences(preferences)
 
         action_vector: list[ActionType] = []
