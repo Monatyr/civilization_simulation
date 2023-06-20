@@ -14,7 +14,7 @@ class Genome:
         for action in self.actions:
             vector_size = int(math.ceil(self.length * preferences[action.name.lower()]))
             specialized_vector = [action]*vector_size
-            action_vector += [specialized_vector]
+            action_vector += specialized_vector
         
         return self.adjust_vector(action_vector)
 
