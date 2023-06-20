@@ -1,4 +1,5 @@
 from simulation_agent.actions.action import Action
+from scoreboard import CivilizationScore
 from numpy import concatenate
 from utils.vec2 import Vec2
 
@@ -37,8 +38,11 @@ class MineAction(Action):
         else:
             healthRestoredScale = 1
             agentCell = self._agent.simulationMap.getCell(self._agent.position)
-            agentCell.mineResource()
-            self._agent.heal(healthRestoredScale)
+            isMineSuccessful = agentCell.mineResource()
+
+            if isMineSuccessful:
+                CivilizationScore.addResourceMined(self._agent.civilizationType)
+                self._agent.heal(healthRestoredScale)
         
         self.counter += 1
         if self.counter == 5:

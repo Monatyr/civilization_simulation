@@ -1,6 +1,41 @@
 from utils.vec2 import Vec2
 from simulation_agent.civilization_type import CivilizationType
 
+class CivilizationScore:
+    resourcesMined = {
+        CivilizationType.RED: 0,
+        CivilizationType.BLUE: 0,
+    }
+
+    fightsWon = {
+        CivilizationType.RED: 0,
+        CivilizationType.BLUE: 0,
+    }
+
+    @staticmethod
+    def addResourceMined(civilizationType :CivilizationType, amount :int = 1):
+        if civilizationType in CivilizationScore.resourcesMined:
+            CivilizationScore.resourcesMined[civilizationType] += amount
+    
+    @staticmethod
+    def addFightsWon(civilizationType :CivilizationType, amount :int = 1):
+        if civilizationType in CivilizationScore.fightsWon:
+            CivilizationScore.fightsWon[civilizationType] += amount
+    
+    @staticmethod
+    def getResourcesMined(civilizationType :CivilizationType):
+        if civilizationType not in CivilizationScore.resourcesMined:
+            return None
+        return CivilizationScore.resourcesMined[civilizationType]
+
+    @staticmethod
+    def getFightsWon(civilizationType :CivilizationType):
+        if civilizationType not in CivilizationScore.fightsWon:
+            return None
+        return CivilizationScore.fightsWon[civilizationType]
+
+
+
 class Scoreboard:
     def __init__(self, map) -> None:
         self.__map = map
@@ -69,3 +104,73 @@ class Scoreboard:
                 "\tBLUE:", self.__blueCount,
                 '(', int(self.__blueStrength), '|', int(self.__blueHealth), ')'
             )
+
+            pnts = self.calculatePoints()
+            print("SCORES:\tred:", pnts[CivilizationType.RED], "\tblue:", pnts[CivilizationType.BLUE])
+    
+    def renderEnd(self):
+        print(
+            "All:",
+            self.__allCount,
+            "\tRED:", self.__redCount,
+            '(', int(self.__redStrength), '|', int(self.__redHealth), ')',
+            "\tBLUE:", self.__blueCount,
+            '(', int(self.__blueStrength), '|', int(self.__blueHealth), ')'
+        )
+
+        pnts = self.calculatePoints()
+        print("SCORES:\tred:", pnts[CivilizationType.RED], "\tblue:", pnts[CivilizationType.BLUE])
+
+        if pnts[CivilizationType.RED] > pnts[CivilizationType.BLUE]:
+            print("RED WON!")
+        elif pnts[CivilizationType.RED] < pnts[CivilizationType.BLUE]:
+            print("BLUE WON!")
+        else:
+            print("DRAW!")
+    
+
+    def getCounts(self):
+        return {
+            CivilizationType.RED: self.__redCount,
+            CivilizationType.BLUE: self.__blueCount
+        }
+
+    def calculatePoints(self):
+        self.__count()
+
+        redTeritorySize = 0
+        blueTeritorySize = 0
+
+        for w in range(self.__map.width):
+            for h in range(self.__map.height):
+                cell = self.__map.getCell(Vec2(w, h))
+
+                if cell.civilizationType == CivilizationType.RED:
+                    redTeritorySize += 1
+                elif cell.civilizationType == CivilizationType.BLUE:
+                    blueTeritorySize += 1
+
+        # print("red:",
+        #     self.__redCount * 100,
+        #     CivilizationScore.getResourcesMined(CivilizationType.RED),
+        #     CivilizationScore.getFightsWon(CivilizationType.RED),
+        #     redTeritorySize)
+        # print("blue:",
+        #     self.__blueCount * 100,
+        #     CivilizationScore.getResourcesMined(CivilizationType.BLUE),
+        #     CivilizationScore.getFightsWon(CivilizationType.BLUE),
+        #     blueTeritorySize)
+        
+        redPoints = self.__redCount * 100 + \
+            CivilizationScore.getResourcesMined(CivilizationType.RED) + \
+            CivilizationScore.getFightsWon(CivilizationType.RED) + \
+            redTeritorySize
+        bluePoints = self.__blueCount * 100 + \
+            CivilizationScore.getResourcesMined(CivilizationType.BLUE) + \
+            CivilizationScore.getFightsWon(CivilizationType.BLUE) + \
+            blueTeritorySize
+
+        return {
+            CivilizationType.RED: redPoints,
+            CivilizationType.BLUE: bluePoints,
+        }
