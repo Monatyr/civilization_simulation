@@ -156,11 +156,10 @@ class Scoreboard:
         else:
             print("DRAW!")
         
-        
         utils.pickle.savePickle('points_over_time.pkl', self.__pointsOverTime)
         utils.pickle.savePickle('civ_count.pkl', self.civ_count)
         utils.plots.renderOverTime(self.__pointsOverTime)
-        utils.plots.renderOverTime(self.civ_count, xlabel="Population", title="Civilization population over time")
+        utils.plots.renderOverTime(self.civ_count, ylabel="Population", title="Civilization population over time")
     
 
     def getCounts(self):
