@@ -2,6 +2,7 @@ from utils.vec2 import Vec2
 from simulation_agent.civilization_type import CivilizationType
 import utils.plots
 import utils.pickle
+import os
 
 class CivilizationScore:
     resourcesMined = {
@@ -113,16 +114,17 @@ class Scoreboard:
         self.__savePoints(pnts)
 
         if hasChanged:
+            os.system('cls')
             print(
                 "All:",
                 self.__allCount,
                 "\tRED:", self.__redCount,
                 '(', int(self.__redStrength), '|', int(self.__redHealth), ')',
                 "\tBLUE:", self.__blueCount,
-                '(', int(self.__blueStrength), '|', int(self.__blueHealth), ')'
+                '(', int(self.__blueStrength), '|', int(self.__blueHealth), ')\n',
+                "\rSCORES:\t\tred:", pnts[CivilizationType.RED], "\t\tblue:", pnts[CivilizationType.BLUE],
             )
 
-            print("SCORES:\tred:", pnts[CivilizationType.RED], "\tblue:", pnts[CivilizationType.BLUE])
     
     def renderEnd(self):
         print(
