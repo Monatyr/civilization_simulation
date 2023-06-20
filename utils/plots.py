@@ -2,8 +2,8 @@ from simulation_agent.civilization_type import CivilizationType
 import matplotlib.pyplot as plt
 import pickle
 
-def renderPointsOverTime(pointsOverTime):
-    for civilizationType, points in pointsOverTime.items():
+def renderOverTime(data, xlabel='Time', ylabel='Points', title='Points Over Time'):
+    for civilizationType, points in data.items():
         if civilizationType == CivilizationType.RED:
             civilizationName = 'red'
             color = 'red'
@@ -16,9 +16,9 @@ def renderPointsOverTime(pointsOverTime):
         
         plt.plot(points, label=civilizationName, color=color)
     
-    plt.xlabel('Time')
-    plt.ylabel('Points')
-    plt.title('Points Over Time')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
 
     plt.legend()
 

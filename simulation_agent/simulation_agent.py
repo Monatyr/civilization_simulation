@@ -80,7 +80,7 @@ class SimulationAgent:
         pygame.draw.circle(
             surface,
             (50, 50, 250) if self.civilizationType == CivilizationType.BLUE else (250, 50, 50),
-            (int(pos.x), int(pos.y)),
+            (int(pos.x) + 1, int(pos.y) + 1),
             size
         )
 
@@ -205,7 +205,8 @@ class SimulationAgent:
     def reproduce(self, other: SimulationAgent):
         v1, v2 = self.actionVector, other.actionVector
         a1, a2 = self.attack, other.attack
-        new_a = round((a1 + a2) / 2, 2)
+        # new_a = round((a1 + a2) / 2, 2)
+        new_a = 0.1
 
         # TOD: regeneration
         new_agent = SimulationAgent(self.simulationMap, self.civilizationType,

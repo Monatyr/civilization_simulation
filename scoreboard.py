@@ -51,6 +51,12 @@ class Scoreboard:
             CivilizationType.RED: [],
             CivilizationType.BLUE: [],
         }
+
+        self.civ_count = {
+            CivilizationType.RED: [],
+            CivilizationType.BLUE: [],
+        }
+
     
     def __count(self):
         allCount = 0
@@ -103,9 +109,13 @@ class Scoreboard:
     def __savePoints(self, pnts):
         self.__pointsOverTime[CivilizationType.RED].append(pnts[CivilizationType.RED])
         self.__pointsOverTime[CivilizationType.BLUE].append(pnts[CivilizationType.BLUE])
+        self.civ_count[CivilizationType.RED].append(self.__redCount)
+        self.civ_count[CivilizationType.BLUE].append(self.__blueCount)
+
     
     def getPointsOverTime(self):
         return self.__pointsOverTime
+
 
     def render(self):
         hasChanged = self.__count()
@@ -148,7 +158,9 @@ class Scoreboard:
         
         
         utils.pickle.savePickle('points_over_time.pkl', self.__pointsOverTime)
-        utils.plots.renderPointsOverTime(self.__pointsOverTime)
+        utils.pickle.savePickle('civ_count.pkl', self.civ_count)
+        utils.plots.renderOverTime(self.__pointsOverTime)
+        utils.plots.renderOverTime(self.civ_count, xlabel="Population", title="Civilization population over time")
     
 
     def getCounts(self):
